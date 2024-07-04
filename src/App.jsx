@@ -4,36 +4,36 @@ import {
   Outlet
 } from 'react-router-dom';
 
-// import Footer from "./components/footer";
-// import Navigation from "./components/navigation";
-// import Home from './pages/Home';
+import Footer from "./components/Footer";
+import Navigation from "./components/Navigation";
+import Guest from './pages/Guest';
 
-// const Layout = () => {
-//   return (
-//     <div className="text-zinc-950 cursor-pointer bg-zinc-950">
-//       <Navigation />
-//       <Outlet />
-//       <Footer />
-//     </div>
-//   );
-// }
+const Layout = () => {
+  return (
+    <div className="text-zinc-950 cursor-pointer bg-zinc-950">
+      <Navigation />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+}
 
-// const router = createBrowserRouter([
-//   {
-//     path: '/',
-//     element:<Layout/>,
-//     children:[
-//       {
-//         path: '/',
-//         element: <Home/>
-//       }
-//     ]
-//   }
-// ])
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element:<Layout/>,
+    children:[
+      {
+        path: '/',
+        element: <Guest/>
+      }
+    ]
+  }
+])
 
 export default function App() {
   return (
-    <div className="">
+    <div>
       <RouterProvider router={router}/>
     </div>
   )
