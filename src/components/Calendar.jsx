@@ -17,15 +17,42 @@ export default function Calendar() {
     const [newEvent, setNewEvent] = useState({
         title: '',
         start: '',
+        end: '',
         allDay: true,
         id: 0
     })
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      console.log(`Changing value for ${name} to ${value}`)
+        setNewEvent(prevEvent => ({
+            ...prevEvent,
+            [name]: value
+        }))
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        setAllEvents(prevEvents => {
+          const updatedEvents = [...prevEvents, newEvent];
+          console.log("Updated Events:", updatedEvents);
+          return updatedEvents;
+        });
+        // setAllEvents([...allEvents, newEvent])
+        setShowModal(false)
+        setNewEvent({
+            title: '',
+            start: '',
+            end: '',
+            allDay: true,
+            id: 0
+        })
+    }
 
     function handleDateClick(arg) {
       console.log(arg);
         setNewEvent({
             ...newEvent,
-            start: arg.date,
             allDay: arg.allDay,
             id: new Date().getTime()
         })
@@ -48,30 +75,12 @@ export default function Calendar() {
         setNewEvent({
             title: '',
             start: '',
-            allDay: false,
+            end: '',
+            allDay: true,
             id: 0
         })
         setShowDeleteModal(false)
         setIdToDelete(null)
-    }
-
-    const handleChange = (e) => {
-        setNewEvent({
-            ...newEvent,
-            title: e.target.value
-        })
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault()
-        setAllEvents([...allEvents, newEvent])
-        setShowModal(false)
-        setNewEvent({
-            title: '',
-            start: '',
-            allDay: false,
-            id: 0
-        })
     }
 
 
@@ -221,16 +230,16 @@ export default function Calendar() {
                         </Dialog.Title>
                         <form action="submit" onSubmit={handleSubmit}>
                           <div className="flex items-center gap-4">
-                            <label htmlFor="guest" className="font-semibold w-16 text-left">Guest</label>
-                            <input id="guest" type="text" name="guest" 
+                            <label htmlFor="title" className="font-semibold w-16 text-left">Guest</label>
+                            <input id="guest" type="text" name="title" 
                             className="
                               px-2 block w-full rounded-md border-0 py-1 text-gray-900 
                               shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                              focus:ring-1
+                              focus:ring-2
                               focus:ring-inset focus:ring-violet-600 
                               sm:text-sm sm:leading-6
                             "
-                              value={newEvent.title} onChange={(e) => handleChange(e)} placeholder="Name of the guest" />
+                              value={newEvent.title} onChange={handleChange} placeholder="Name of the guest" />
                           </div>
                           <div className="mt-2 flex items-center gap-4">
                             <label htmlFor="phone" className="font-semibold w-16 text-left">Phone</label>
@@ -259,7 +268,7 @@ export default function Calendar() {
                           <div className="flex items center gap-4">
                             <div className="mt-2 flex items-center gap-2">
                               <label htmlFor="checkin" className="font-semibold">Check-In</label>
-                              <input id="checkout" type="date" name="checkin" 
+                              <input id="checkout" type="date" name="start" 
                               className="
                                 px-2 py-1 block rounded-md border-0 text-gray-900 
                                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
@@ -267,11 +276,12 @@ export default function Calendar() {
                                 sm:text-sm sm:leading-6
                               "
                                 placeholder="" min="" max=""
+                                value={newEvent.start} onChange={handleChange}
                                 />
                             </div>
                             <div className="mt-2 flex items-center gap-2">
                               <label htmlFor="checkout" className="font-semibold">Check-Out</label>
-                              <input id="checkout" type="date" name="checkout" 
+                              <input id="checkout" type="date" name="end" 
                               className="
                                 px-2 py-1 block rounded-md border-0 text-gray-900 
                                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
@@ -279,6 +289,7 @@ export default function Calendar() {
                                 sm:text-sm sm:leading-6
                               "
                                 placeholder="" min="" max=""
+                                value={newEvent.end} onChange={handleChange}
                                 />
                             </div>
                           </div>
