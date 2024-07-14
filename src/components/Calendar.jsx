@@ -6,13 +6,16 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon, ExclamationTriangleIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, ExclamationTriangleIcon, HomeModernIcon } from "@heroicons/react/20/solid";
+
 
 
 export default function Calendar() {
     const [allEvents, setAllEvents] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEventModal, setShowEventModal] = useState(false);
+    const [toShow, setToShow] = useState(null)
     const [idToDelete, setIdToDelete] = useState(null)
     const [newEvent, setNewEvent] = useState({
         title: '',
@@ -59,14 +62,21 @@ export default function Calendar() {
         setShowModal(true)
     }
 
-    function handleDeleteModal(data) {
+    function handleDeleteModal() {
         setShowDeleteModal(true)
-        setIdToDelete(Number(data.event.id))
+    }
+
+    function handleShowEvent(data) {
+      setShowEventModal(true);
+      setToShow(data.event)
+      setIdToDelete(data.event.id)
     }
 
     function handleDelete() {
+        setShowEventModal(false)
+        console.log(idToDelete)
         setAllEvents(allEvents.filter(event => event.id !== idToDelete))
-        setShowDeleteModal(false)
+        console.log(allEvents)
         setIdToDelete(null)
     }
 
@@ -79,8 +89,10 @@ export default function Calendar() {
             allDay: true,
             id: 0
         })
+        setShowEventModal(false)
         setShowDeleteModal(false)
         setIdToDelete(null)
+        setToShow(null)
     }
 
 
@@ -108,7 +120,7 @@ export default function Calendar() {
                             selectable={true}
                             selectMirror={true}
                             dateClick={handleDateClick}
-                            eventClick={handleDeleteModal}
+                            eventClick={handleShowEvent}
                         />
                     </div>
                     <div className="col-span-2 ml-8 w-full h-7/12 border-2 p-2 rounded-md mt-16 bg-violet-50">
@@ -182,6 +194,64 @@ export default function Calendar() {
                         Delete
                       </button>
                       <button type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 
+                      shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                        onClick={handleCloseModal}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+        <Transition.Root show={showEventModal} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={setShowEventModal}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+            <div className="fixed inset-0 z-10 overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-max sm:p-6">
+                    <div>
+                      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                          <HomeModernIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                        </div>
+                        <div className="mt-3 text-center sm:mt-5">
+                          <Dialog.Title as="h3" className="mb-8 text-base font-semibold leading-6 text-gray-900">
+                            View Reservation.
+                          </Dialog.Title>
+                          <div className="w-full text-left">
+                            <p><span className="font-bold">Name: </span>{toShow && toShow.title}</p>
+                            <p><span className="font-bold">Chek-In Date: </span>{toShow && toShow.start.toDateString()}</p>
+                            <p><span className="font-bold">Check-Out Date: </span>{toShow && toShow.start.toDateString()}</p>
+                          </div>
+                        </div>
+                    </div>
+                    <div className="mt-8 flex gap-8 w-full">
+                    <button type="button" className="grow inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm 
+                      font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto" onClick={handleDelete}>
+                        Delete
+                      </button>
+                    <button type="button" className="grow mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 
                       shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                         onClick={handleCloseModal}
                       >
