@@ -73,10 +73,10 @@ export default function Calendar() {
     }
 
     function handleDelete() {
-        setShowEventModal(false)
+        setAllEvents(prevEvents => prevEvents.filter(event => event.id !== idToDelete))
         console.log(idToDelete)
-        setAllEvents(allEvents.filter(event => event.id !== idToDelete))
         console.log(allEvents)
+        setShowEventModal(false)
         setIdToDelete(null)
     }
 
