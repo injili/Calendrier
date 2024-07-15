@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -34,23 +35,59 @@ export default function Calendar() {
         }))
     }
 
+
     function handleSubmit(e) {
-        e.preventDefault()
-        setAllEvents(prevEvents => {
-          const updatedEvents = [...prevEvents, newEvent];
-          console.log("Updated Events:", updatedEvents);
-          return updatedEvents;
-        });
-        // setAllEvents([...allEvents, newEvent])
-        setShowModal(false)
-        setNewEvent({
-            title: '',
-            start: '',
-            end: '',
-            allDay: true,
-            id: 0
+      e.preventDefault();
+      const eventToCreate = {
+        data:{
+          title: newEvent.title,
+          start: newEvent.start,
+          end: newEvent.end,
+          allDay: newEvent.allDay,
+        }
+      };
+
+      axios.post('http://localhost:1337/api/reservations', eventToCreate,
+        {
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer 44f2a2de5c0dfa1243b0e811b0cf485ff07e98213a729ef317411facbd0c9d3b5d6beec68e03944ff90da6dfcbd049d9ab5bab81aa6430e2a13f97617967b75e850a7035903f6b980e9b505505a5e6b4c1b0d741196b35d11fcd8afc6f671f6506b75ebc900ce7a337ffe7f5396972384e41eabad8990510df4cb28f3a52cb02"
+          },
         })
+      .then(response => {
+        console.log('Event created:', response.data);
+        setAllEvents(prevEvents => [...prevEvents, response.data]);
+        setShowModal(false);
+        setNewEvent({
+          title: '',
+          start: '',
+          end: '',
+          allDay: true,
+          id: 0
+        })
+      })
+      .catch(error => {
+        console.error('There was an error submitting event!', error);
+      });
     }
+
+    // function handleSubmit(e) {
+    //     e.preventDefault()
+    //     setAllEvents(prevEvents => {
+    //       const updatedEvents = [...prevEvents, newEvent];
+    //       console.log("Updated Events:", updatedEvents);
+    //       return updatedEvents;
+    //     });
+    //     // setAllEvents([...allEvents, newEvent])
+    //     setShowModal(false)
+    //     setNewEvent({
+    //         title: '',
+    //         start: '',
+    //         end: '',
+    //         allDay: true,
+    //         id: 0
+    //     })
+    // }
 
     function handleDateClick(arg) {
       console.log(arg);
