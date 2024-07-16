@@ -44,11 +44,7 @@ export default function Calendar() {
           id: event.id
         }));
 
-        setNewEvent(formattedEvents);
-        setAllEvents(prevEvents => {
-          const updatedEvents = [...prevEvents, newEvent];
-          return updatedEvents;
-        });
+        setAllEvents(formattedEvents);
         
       })
       .catch(error => {

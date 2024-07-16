@@ -6,7 +6,8 @@ import {
 
 import Footer from "./components/Footer";
 import Navigation from "./components/Navigation";
-import Guest from './pages/Guest';
+import Guest from './components/Guest';
+import Calendar from './components/Calendar';
 
 const Layout = () => {
   return (
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Guest/>
+      },
+      {
+        path: '/calendar',
+        element: <Calendar/>
       }
     ]
   }
