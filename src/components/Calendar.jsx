@@ -22,6 +22,8 @@ export default function Calendar() {
         title: '',
         start: '',
         end: '',
+        phone: '',
+        villas: '',
         allDay: true,
         id: 0
     })
@@ -40,6 +42,8 @@ export default function Calendar() {
           title: event.attributes.title,
           start: event.attributes.start,
           end: event.attributes.end,
+          phone: event.attributes.phone,
+          villas: event.attributes.villas,
           allDay: event.attributes.allDay,
           id: event.id
         }));
@@ -69,6 +73,8 @@ export default function Calendar() {
           title: newEvent.title,
           start: newEvent.start,
           end: newEvent.end,
+          phone: newEvent.phone,
+          villas: newEvent.villas,
           allDay: newEvent.allDay,
         }
       };
@@ -93,6 +99,8 @@ export default function Calendar() {
           title: '',
           start: '',
           end: '',
+          phone: '',
+          villas: '',
           allDay: true,
           id: 0
         })
@@ -101,24 +109,6 @@ export default function Calendar() {
         console.error('There was an error submitting event!', error);
       });
     }
-
-    // function handleSubmit(e) {
-    //     e.preventDefault()
-        // setAllEvents(prevEvents => {
-        //   const updatedEvents = [...prevEvents, newEvent];
-        //   console.log("Updated Events:", updatedEvents);
-        //   return updatedEvents;
-        // });
-    //     // setAllEvents([...allEvents, newEvent])
-    //     setShowModal(false)
-    //     setNewEvent({
-    //         title: '',
-    //         start: '',
-    //         end: '',
-    //         allDay: true,
-    //         id: 0
-    //     })
-    // }
 
     function handleDateClick(arg) {
       console.log(arg);
@@ -134,10 +124,17 @@ export default function Calendar() {
         setShowDeleteModal(true)
     }
 
+    const findRecordbyId = (id) => {
+      console.log(id)
+      console.log(allEvents.find(event => event.id === id))
+      return allEvents.find(event => event.id === id);
+    };
+
     function handleShowEvent(data) {
       setShowEventModal(true);
-      setToShow(data.event)
-      setIdToDelete(data.event.id)
+      setIdToDelete(parseInt(data.event.id, 10))
+      const record = findRecordbyId(parseInt(data.event.id, 10))
+      setToShow(record);
     }
 
     function handleDelete() {
@@ -154,6 +151,8 @@ export default function Calendar() {
             title: '',
             start: '',
             end: '',
+            phone: '',
+            villas: '',
             allDay: true,
             id: 0
         })
@@ -309,8 +308,10 @@ export default function Calendar() {
                           </Dialog.Title>
                           <div className="w-full text-left">
                             <p><span className="font-bold">Name: </span>{toShow && toShow.title}</p>
-                            <p><span className="font-bold">Chek-In Date: </span>{toShow && toShow.start.toDateString()}</p>
-                            <p><span className="font-bold">Check-Out Date: </span>{toShow && toShow.start.toDateString()}</p>
+                            <p><span className="font-bold">Phone: </span>{toShow && toShow.phone}</p>
+                            <p><span className="font-bold">Villas: </span>{toShow && toShow.villas}</p>
+                            <p><span className="font-bold">Chek-In Date: </span>{toShow && toShow.start}</p>
+                            <p><span className="font-bold">Check-Out Date: </span>{toShow && toShow.end}</p>
                           </div>
                         </div>
                     </div>
@@ -389,6 +390,7 @@ export default function Calendar() {
                               sm:text-sm sm:leading-6
                             "
                               placeholder="0712345678"
+                              value={newEvent.phone} onChange={handleChange}
                               />
                           </div>
                           <div className="mt-2 flex items-center gap-4">
@@ -401,6 +403,7 @@ export default function Calendar() {
                               sm:text-sm sm:leading-6
                             "
                               placeholder="1" min="1" max="3"
+                              value={newEvent.villas} onChange={handleChange}
                               />
                           </div>
                           <div className="flex items center gap-4">
