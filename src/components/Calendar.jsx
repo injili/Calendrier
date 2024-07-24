@@ -199,8 +199,8 @@ export default function Calendar() {
     return (
         <>
             <main>
-                <div className="mx-12 p-8 px-24 grid grid-cols-10">
-                    <div className="col-span-6 h-screen">
+                <div className="mx-12 p-8 px-24 grid grid-cols-10 h-screen">
+                    <div className="col-span-7">
                         <FullCalendar 
                             plugins={[
                                 dayGridPlugin,
@@ -224,7 +224,7 @@ export default function Calendar() {
                             eventClick={handleShowEvent}
                         />
                     </div>
-                    <div className="col-span-3 ml-8 w-full p-2 h-max rounded-md mt-16 bg-zinc-100">
+                    <div className="col-span-2 ml-8 w-full p-2 h-max rounded-md mt-16 bg-zinc-100">
                         <h1>Settings</h1>
                         <div>
                           <h2>Pick Date</h2>

@@ -15,6 +15,10 @@ input {
       @apply space-x-8;
   }
 
+  .fc .fc-view-harness-active > .fc-view {
+    @apply h-5/6;
+  }
+
   .fc {
     @apply font-alata;
   }
