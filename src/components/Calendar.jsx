@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
 import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon, ExclamationTriangleIcon, HomeModernIcon } from "@heroicons/react/20/solid";
@@ -200,8 +199,8 @@ export default function Calendar() {
     return (
         <>
             <main>
-                <div className="m-8 p-8 grid grid-cols-10">
-                    <div className="col-span-8">
+                <div className="mx-12 p-8 px-24 grid grid-cols-10">
+                    <div className="col-span-6 h-screen">
                         <FullCalendar 
                             plugins={[
                                 dayGridPlugin,
@@ -213,19 +212,19 @@ export default function Calendar() {
                                 center: 'title',
                                 right: 'today'
                             }}
-                            initialView={"dayGridMonth"}
                             events={allEvents}
                             nowIndicator={true}
                             editable={true}
                             droppable={true}
                             selectable={true}
                             selectMirror={true}
+                            fixedWeekCount={false}
                             eventBackgroundColor={"#38ffde"}
                             dateClick={handleDateClick}
                             eventClick={handleShowEvent}
                         />
                     </div>
-                    <div className="col-span-2 ml-8 w-full border-2 p-2 rounded-md mt-16 bg-neutral-50">
+                    <div className="col-span-3 ml-8 w-full p-2 h-max rounded-md mt-16 bg-zinc-100">
                         <h1>Settings</h1>
                         <div>
                           <h2>Pick Date</h2>
@@ -410,7 +409,7 @@ export default function Calendar() {
                               px-2 block w-full rounded-md border-0 py-1 text-gray-900 
                               shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
                               focus:ring-2
-                              focus:ring-inset focus:ring-neutral-600 
+                              focus:ring-inset focus:ring-zinc-600 
                               sm:text-sm sm:leading-6
                             "
                               value={newEvent.title} onChange={handleChange} placeholder="Name of the guest" />
@@ -421,7 +420,7 @@ export default function Calendar() {
                             className="
                               px-2 py-1 block w-full rounded-md border-0 text-gray-900 
                               shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                              focus:ring-2 focus:ring-inset focus:ring-neutral-600 
+                              focus:ring-2 focus:ring-inset focus:ring-zinc-600 
                               sm:text-sm sm:leading-6
                             "
                               placeholder="0712345678"
@@ -434,7 +433,7 @@ export default function Calendar() {
                             className="
                               px-2 py-1 block w-full rounded-md border-0 text-gray-900 
                               shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                              focus:ring-2 focus:ring-inset focus:ring-neutral-600 
+                              focus:ring-2 focus:ring-inset focus:ring-zinc-600 
                               sm:text-sm sm:leading-6
                             "
                               placeholder="1" min="1" max="3"
@@ -448,7 +447,7 @@ export default function Calendar() {
                               className="
                                 px-2 py-1 block rounded-md border-0 text-gray-900 
                                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                                focus:ring-2 focus:ring-inset focus:ring-neutral-600 
+                                focus:ring-2 focus:ring-inset focus:ring-zinc-600 
                                 sm:text-sm sm:leading-6
                               "
                                 placeholder="" min="" max=""
@@ -461,7 +460,7 @@ export default function Calendar() {
                               className="
                                 px-2 py-1 block rounded-md border-0 text-gray-900 
                                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                                focus:ring-2 focus:ring-inset focus:ring-neutral-600 
+                                focus:ring-2 focus:ring-inset focus:ring-zinc-600 
                                 sm:text-sm sm:leading-6
                               "
                                 placeholder="" min="" max=""
@@ -472,7 +471,7 @@ export default function Calendar() {
                           <div className="mt-8 sm:mt-8 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                             <button
                               type="submit"
-                              className="inline-flex w-full justify-center rounded-md bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-600 sm:col-start-2 disabled:opacity-25"
+                              className="inline-flex w-full justify-center rounded-md bg-zinc-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600 sm:col-start-2 disabled:opacity-25"
                               disabled={newEvent.title === ''}
                             >
                               Reserve

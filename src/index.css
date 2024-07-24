@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,40 +14,72 @@ input {
       
       @apply space-x-8;
   }
-  
-  .fc-day {
-    @apply m-8;
+
+  .fc {
+    @apply font-alata;
   }
-  
+
+  .fc .fc-view-harness {
+    @apply h-screen;
+  }
+
+  .fc .fc-scrollgrid {
+    @apply border-none;
+  }
+
+  .fc .fc-toolbar-title {
+    @apply font-semibold font-alata text-5xl;
+  }
+
+  .fc-theme-standard th {
+    @apply border-none;
+  }
+
+  .fc .fc-daygrid-day-bg .fc-bg-event {
+    @apply opacity-100 rounded-md;
+  }
+
+  .fc-theme-standard td {
+    @apply border-none p-1;
+  }
+
+  .fc .fc-daygrid-day-frame {
+    @apply bg-zinc-100 rounded-md;
+  }
+
+  .fc .fc-daygrid-day-number {
+    @apply pr-2;
+  }
+
   .fc-scrollgrid-sync-table {
     @apply w-full;
   }
-  
+
   .fc-view {
-    @apply w-full bg-neutral-100;
+    @apply w-full h-full lg:h-3/4 xl:h-2/3 bg-white;
   }
   
   .fc-h-event {
-    @apply rounded-md px-2 bg-neutral-500 border border-neutral-100 ;
+    @apply rounded-md px-2 bg-zinc-500 border border-zinc-100 ;
     
   }
   
   .fc .fc-daygrid-day.fc-day-today {
-    @apply bg-neutral-200 ;
+    @apply bg-zinc-600 rounded-md;
   }
  
   .fc .fc-button{
-    @apply bg-neutral-600 hover:bg-neutral-700  border border-white hover:border-white;
+    @apply bg-zinc-950 hover:bg-zinc-800  border border-white hover:border-white rounded-lg;
   }
   
   .fc .fc-button-primary:not(:disabled).fc-button-active {
-    @apply bg-neutral-600 border border-white hover:border-white;
+    @apply bg-violet-600;
   }
   
   .fc .fc-button-primary:disabled {
-    @apply bg-neutral-600;
+    @apply bg-zinc-950;
   }
   .fc-v-event {
-    @apply bg-neutral-500 border border-neutral-600 ;
+    @apply bg-zinc-500 border border-zinc-600 ;
     
   }
