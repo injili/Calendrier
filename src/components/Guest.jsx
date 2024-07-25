@@ -77,7 +77,7 @@ export default function Guest() {
             if (event.villas === 1) {
                 bgc = '#59a321';
             } else if (event.villas === 2) {
-                bgc = '#f7d139';
+                bgc = '#f58318';
             } else {
                 bgc = '#962921';
             }

@@ -53,7 +53,7 @@ export default function Calendar() {
           if (event.villas === 1) {
               bgc = '#59a321';
           } else if (event.villas === 2) {
-              bgc = '#f7d139';
+              bgc = '#f58318';
           } else {
               bgc = '#962921';
           }
@@ -224,23 +224,53 @@ export default function Calendar() {
                             eventClick={handleShowEvent}
                         />
                     </div>
-                    <div className="col-span-2 ml-8 w-full p-2 h-max rounded-md mt-16 bg-zinc-100">
-                        <h1>Settings</h1>
-                        <div>
-                          <h2>Pick Date</h2>
-                          <p>Date Picker Goes Here</p>
+                    <div className="col-span-2 ml-8 w-max p-8 h-max rounded-md font-alata mt-20">
+                        <div className="bg-zinc-100 p-4 py-8 rounded-lg">
+                          <div className="w-full">
+                            <h2 className="text-3xl font-medium font-alata text-center pb-8">Set Pricing</h2>
+                          </div>
+                          <form action="POST">
+                            <div className="flex flex-row gap-4 pb-4">
+                              <div className="flex gap-2 items-center">
+                                <label htmlFor="pricestart">Start</label>
+                                <input type="date" id="pricestart" name="pricestart" className="p-1 border border-green-600 rounded-md"/>
+                              </div>
+                              <div className="flex gap-2 items-center">
+                                <label htmlFor="priceend">End</label>
+                                <input type="date" id="priceend" name="priceend" className="p-1 border border-green-600 rounded-md"/>
+                              </div>
+                            </div>
+                            <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
+                              <label htmlFor="pricing">Pricing</label>
+                              <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 px-2 border border-green-600 rounded-md"/>
+                            </div>
+                            <button
+                                    type="button"
+                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3  py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-green-600 hover:bg-green-600 sm:col-start-1 sm:mt-0"
+
+                                  >
+                                    Cancel
+                            </button>
+                          </form>
                         </div>
-                        <div>
-                          <h2>Actions</h2>
-                          <p>Activate</p>
-                          <p>Deactivate</p>
-                          <p>Set Pricing</p>
+                        <div className="bg-zinc-100 mt-2 p-4 py-8 rounded-lg">
+                          <div className="w-full">
+                            <h2 className="text-3xl font-medium font-alata text-center pb-8">Default Pricings</h2>
+                          </div>
+                          <form action="POST">
+                            <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
+                              <label htmlFor="pricing">Pricing</label>
+                              <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 px-2 border border-green-600 rounded-md"/>
+                            </div>
+                            <button
+                                    type="button"
+                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-green-600 hover:bg-green-600 sm:col-start-1 sm:mt-0"
+
+                                  >
+                                    Cancel
+                            </button>
+                          </form>
                         </div>
-                        <div>
-                          <p>Save Changes</p>
-                          <p>Reset</p>
-                        </div>
-                        
                     </div>
                 </div>
 
@@ -306,194 +336,194 @@ export default function Calendar() {
               </div>
             </div>
           </Dialog>
-        </Transition.Root>
-        <Transition.Root show={showEventModal} as={Fragment}>
-          <Dialog as="div" className="relative z-10" onClose={setShowEventModal}>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
-            <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  enterTo="opacity-100 translate-y-0 sm:scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-max sm:p-6">
-                    <div>
-                      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                          <HomeModernIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                        </div>
-                        <div className="mt-3 text-center sm:mt-5">
-                          <Dialog.Title as="h3" className="mb-8 text-base font-semibold leading-6 text-gray-900">
-                            View Reservation.
-                          </Dialog.Title>
-                          <div className="w-full text-left">
-                            <p><span className="font-bold">Name: </span>{toShow && toShow.title}</p>
-                            <p><span className="font-bold">Phone: </span>{toShow && toShow.phone}</p>
-                            <p><span className="font-bold">Villas: </span>{toShow && toShow.villas}</p>
-                            <p><span className="font-bold">Chek-In Date: </span>{toShow && toShow.start}</p>
-                            <p><span className="font-bold">Check-Out Date: </span>{toShow && toShow.end}</p>
-                          </div>
-                        </div>
-                    </div>
-                    <div className="mt-8 flex gap-8 w-full">
-                    <button type="button" className="grow inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm 
-                      font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto" onClick={handleDelete}>
-                        Delete
-                      </button>
-                    <button type="button" className="grow mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 
-                      shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                        onClick={handleCloseModal}
+              </Transition.Root>
+              <Transition.Root show={showEventModal} as={Fragment}>
+                <Dialog as="div" className="relative z-10" onClose={setShowEventModal}>
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                  </Transition.Child>
+                  <div className="fixed inset-0 z-10 overflow-y-auto">
+                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                      <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                        enterTo="opacity-100 translate-y-0 sm:scale-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                        leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                       >
-                        Cancel
-                      </button>
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
-          </Dialog>
-        </Transition.Root>
-        <Transition.Root show={showModal} as={Fragment}>
-          <Dialog as="div" className="relative z-10" onClose={setShowModal}>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            </Transition.Child>
-
-            <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  enterTo="opacity-100 translate-y-0 sm:scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-max sm:p-6">
-                    <div>
-                      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                        <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                      </div>
-                      <div className="mt-3 text-center sm:mt-5">
-                        <Dialog.Title as="h3" className="mb-8 text-base font-semibold leading-6 text-gray-900">
-                          Make Reservation.
-                        </Dialog.Title>
-                        <form action="submit" onSubmit={handleSubmit}>
-                          <div className="flex items-center gap-4">
-                            <label htmlFor="title" className="font-semibold w-16 text-left">Guest</label>
-                            <input id="guest" type="text" name="title" 
-                            className="
-                              px-2 block w-full rounded-md border-0 py-1 text-gray-900 
-                              shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                              focus:ring-2
-                              focus:ring-inset focus:ring-zinc-600 
-                              sm:text-sm sm:leading-6
-                            "
-                              value={newEvent.title} onChange={handleChange} placeholder="Name of the guest" />
+                        <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-max sm:p-6">
+                          <div>
+                            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                                <HomeModernIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                              </div>
+                              <div className="mt-3 text-center sm:mt-5">
+                                <Dialog.Title as="h3" className="mb-8 text-base font-semibold leading-6 text-gray-900">
+                                  View Reservation.
+                                </Dialog.Title>
+                                <div className="w-full text-left">
+                                  <p><span className="font-bold">Name: </span>{toShow && toShow.title}</p>
+                                  <p><span className="font-bold">Phone: </span>{toShow && toShow.phone}</p>
+                                  <p><span className="font-bold">Villas: </span>{toShow && toShow.villas}</p>
+                                  <p><span className="font-bold">Chek-In Date: </span>{toShow && toShow.start}</p>
+                                  <p><span className="font-bold">Check-Out Date: </span>{toShow && toShow.end}</p>
+                                </div>
+                              </div>
                           </div>
-                          <div className="mt-2 flex items-center gap-4">
-                            <label htmlFor="phone" className="font-semibold w-16 text-left">Phone</label>
-                            <input id="phone" type="tel" name="phone" 
-                            className="
-                              px-2 py-1 block w-full rounded-md border-0 text-gray-900 
-                              shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                              focus:ring-2 focus:ring-inset focus:ring-zinc-600 
-                              sm:text-sm sm:leading-6
-                            "
-                              placeholder="0712345678"
-                              value={newEvent.phone} onChange={handleChange}
-                              />
-                          </div>
-                          <div className="mt-2 flex items-center gap-4">
-                            <label htmlFor="villas" className="font-semibold w-16 text-left">Villas</label>
-                            <input id="villas" type="number" name="villas" 
-                            className="
-                              px-2 py-1 block w-full rounded-md border-0 text-gray-900 
-                              shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                              focus:ring-2 focus:ring-inset focus:ring-zinc-600 
-                              sm:text-sm sm:leading-6
-                            "
-                              placeholder="1" min="1" max="3"
-                              value={newEvent.villas} onChange={handleChange}
-                              />
-                          </div>
-                          <div className="flex items center gap-4">
-                            <div className="mt-2 flex items-center gap-2">
-                              <label htmlFor="checkin" className="font-semibold">Check-In</label>
-                              <input id="checkout" type="date" name="start" 
-                              className="
-                                px-2 py-1 block rounded-md border-0 text-gray-900 
-                                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                                focus:ring-2 focus:ring-inset focus:ring-zinc-600 
-                                sm:text-sm sm:leading-6
-                              "
-                                placeholder="" min="" max=""
-                                value={newEvent.start} onChange={handleChange}
-                                />
-                            </div>
-                            <div className="mt-2 flex items-center gap-2">
-                              <label htmlFor="checkout" className="font-semibold">Check-Out</label>
-                              <input id="checkout" type="date" name="end" 
-                              className="
-                                px-2 py-1 block rounded-md border-0 text-gray-900 
-                                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
-                                focus:ring-2 focus:ring-inset focus:ring-zinc-600 
-                                sm:text-sm sm:leading-6
-                              "
-                                placeholder="" min="" max=""
-                                value={newEvent.end} onChange={handleChange}
-                                />
-                            </div>
-                          </div>
-                          <div className="mt-8 sm:mt-8 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                            <button
-                              type="submit"
-                              className="inline-flex w-full justify-center rounded-md bg-zinc-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600 sm:col-start-2 disabled:opacity-25"
-                              disabled={newEvent.title === ''}
-                            >
-                              Reserve
+                          <div className="mt-8 flex gap-8 w-full">
+                          <button type="button" className="grow inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm 
+                            font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto" onClick={handleDelete}>
+                              Delete
                             </button>
-                            <button
-                              type="button"
-                              className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                          <button type="button" className="grow mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 
+                            shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                               onClick={handleCloseModal}
-
                             >
                               Cancel
                             </button>
                           </div>
-                        </form>
-                      </div>
+                        </Dialog.Panel>
+                      </Transition.Child>
                     </div>
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
-          </Dialog>
-        </Transition.Root>
+                  </div>
+                </Dialog>
+              </Transition.Root>
+              <Transition.Root show={showModal} as={Fragment}>
+                <Dialog as="div" className="relative z-10" onClose={setShowModal}>
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                  </Transition.Child>
+
+                  <div className="fixed inset-0 z-10 overflow-y-auto">
+                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                      <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                        enterTo="opacity-100 translate-y-0 sm:scale-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                        leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                      >
+                        <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-max sm:p-6">
+                          <div>
+                            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                              <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                            </div>
+                            <div className="mt-3 text-center sm:mt-5">
+                              <Dialog.Title as="h3" className="mb-8 text-base font-semibold leading-6 text-gray-900">
+                                Make Reservation.
+                              </Dialog.Title>
+                              <form action="submit" onSubmit={handleSubmit}>
+                                <div className="flex items-center gap-4">
+                                  <label htmlFor="title" className="font-semibold w-16 text-left">Guest</label>
+                                  <input id="guest" type="text" name="title" 
+                                  className="
+                                    px-2 block w-full rounded-md border-0 py-1 text-gray-900 
+                                    shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+                                    focus:ring-2
+                                    focus:ring-inset focus:ring-zinc-600 
+                                    sm:text-sm sm:leading-6
+                                  "
+                                    value={newEvent.title} onChange={handleChange} placeholder="Name of the guest" />
+                                </div>
+                                <div className="mt-2 flex items-center gap-4">
+                                  <label htmlFor="phone" className="font-semibold w-16 text-left">Phone</label>
+                                  <input id="phone" type="tel" name="phone" 
+                                  className="
+                                    px-2 py-1 block w-full rounded-md border-0 text-gray-900 
+                                    shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+                                    focus:ring-2 focus:ring-inset focus:ring-zinc-600 
+                                    sm:text-sm sm:leading-6
+                                  "
+                                    placeholder="0712345678"
+                                    value={newEvent.phone} onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="mt-2 flex items-center gap-4">
+                                  <label htmlFor="villas" className="font-semibold w-16 text-left">Villas</label>
+                                  <input id="villas" type="number" name="villas" 
+                                  className="
+                                    px-2 py-1 block w-full rounded-md border-0 text-gray-900 
+                                    shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+                                    focus:ring-2 focus:ring-inset focus:ring-zinc-600 
+                                    sm:text-sm sm:leading-6
+                                  "
+                                    placeholder="1" min="1" max="3"
+                                    value={newEvent.villas} onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="flex items center gap-4">
+                                  <div className="mt-2 flex items-center gap-2">
+                                    <label htmlFor="checkin" className="font-semibold">Check-In</label>
+                                    <input id="checkout" type="date" name="start" 
+                                    className="
+                                      px-2 py-1 block rounded-md border-0 text-gray-900 
+                                      shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+                                      focus:ring-2 focus:ring-inset focus:ring-zinc-600 
+                                      sm:text-sm sm:leading-6
+                                    "
+                                      placeholder="" min="" max=""
+                                      value={newEvent.start} onChange={handleChange}
+                                      />
+                                  </div>
+                                  <div className="mt-2 flex items-center gap-2">
+                                    <label htmlFor="checkout" className="font-semibold">Check-Out</label>
+                                    <input id="checkout" type="date" name="end" 
+                                    className="
+                                      px-2 py-1 block rounded-md border-0 text-gray-900 
+                                      shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+                                      focus:ring-2 focus:ring-inset focus:ring-zinc-600 
+                                      sm:text-sm sm:leading-6
+                                    "
+                                      placeholder="" min="" max=""
+                                      value={newEvent.end} onChange={handleChange}
+                                      />
+                                  </div>
+                                </div>
+                                <div className="mt-8 sm:mt-8 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                                  <button
+                                    type="submit"
+                                    className="inline-flex w-full justify-center rounded-md bg-zinc-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600 sm:col-start-2 disabled:opacity-25"
+                                    disabled={newEvent.title === ''}
+                                  >
+                                    Reserve
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                                    onClick={handleCloseModal}
+
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </Dialog.Panel>
+                      </Transition.Child>
+                    </div>
+                  </div>
+                </Dialog>
+              </Transition.Root>
             </main>
         </>
     )
