@@ -12,11 +12,23 @@ import { CheckIcon, ExclamationTriangleIcon, HomeModernIcon } from "@heroicons/r
 
 export default function Calendar() {
     const [allEvents, setAllEvents] = useState([]);
+    const [allSeasonals, setAllSeasonals] = useState([]);
+    const [allDefaults, setAllDefaults] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEventModal, setShowEventModal] = useState(false);
     const [toShow, setToShow] = useState(null)
+    const [showAlert, setShowAlert] = useState(false);
+    const [showAlertSeasonal, setShowAlertSeasonal] = useState(false);
     const [idToDelete, setIdToDelete] = useState(null)
+    const [newDefault, setNewDefault] = useState({
+      pricing: 1
+    })
+    const [newSeasonal, setNewSeasonal] = useState({
+      startDate: '',
+      endDate: '',
+      seasonalPricing: 1,
+    })
     const [newEvent, setNewEvent] = useState({
         title: '',
         start: '',
@@ -27,6 +39,21 @@ export default function Calendar() {
         backgroundColor: '',
         id: 0
     })
+
+    const displayAlert = (v) => {
+      if (v === 1) {
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 10000); // Hide the alert after 10 seconds
+      } else {
+        setShowAlertSeasonal(true);
+        setTimeout(() => {
+          setShowAlertSeasonal(false);
+        }, 10000); // Hide the alert after 10 seconds
+      }
+      
+    };
 
     useEffect(() => {
       axios.get('http://localhost:1337/api/reservations', {
@@ -66,6 +93,48 @@ export default function Calendar() {
       .catch(error => {
         console.error('There was an error fetching the events', error);
       });
+
+      axios.get('http://localhost:1337/api/seasonal-pricings', {
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Bearer 44f2a2de5c0dfa1243b0e811b0cf485ff07e98213a729ef317411facbd0c9d3b5d6beec68e03944ff90da6dfcbd049d9ab5bab81aa6430e2a13f97617967b75e850a7035903f6b980e9b505505a5e6b4c1b0d741196b35d11fcd8afc6f671f6506b75ebc900ce7a337ffe7f5396972384e41eabad8990510df4cb28f3a52cb02"
+        }
+      })
+      .then(response => {
+        console.log('Fetched Seasonal Pricing:', response.data.data);
+
+        const formattedSeasonals = response.data.data.map(e => ({
+          startDate: e.attributes.start,
+          endDate: e.attributes.end,
+          seasonalPricing: e.attributes.pricing,
+        }));
+  
+        setAllSeasonals(formattedSeasonals);
+        
+      })
+      .catch(error => {
+        console.error('There was an error fetching the seasonals', error);
+      }); 
+
+      axios.get('http://localhost:1337/api/default-pricings', {
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Bearer 44f2a2de5c0dfa1243b0e811b0cf485ff07e98213a729ef317411facbd0c9d3b5d6beec68e03944ff90da6dfcbd049d9ab5bab81aa6430e2a13f97617967b75e850a7035903f6b980e9b505505a5e6b4c1b0d741196b35d11fcd8afc6f671f6506b75ebc900ce7a337ffe7f5396972384e41eabad8990510df4cb28f3a52cb02"
+        }
+      })
+      .then(response => {
+        console.log('Fetched Default Pricing:', response.data.data);
+
+        const formattedDefaults = response.data.data.map(e => ({
+          pricing: e.attributes.pricing,
+        }));
+
+        setAllDefaults(formattedDefaults);
+        
+      })
+      .catch(error => {
+        console.error('There was an error fetching the seasonals', error);
+      }); 
     }, [])
 
     const handleChange = (e) => {
@@ -77,6 +146,23 @@ export default function Calendar() {
         }))
     }
 
+    const handleDefaultChange = (e) => {
+      const { name, value } = e.target;
+      console.log(`Changing value for ${name} to ${value}`)
+        setNewDefault(prevEvent => ({
+            ...prevEvent,
+            [name]: value
+        }))
+    }
+
+    const handleSeasonalChange = (e) => {
+      const { name, value } = e.target;
+      console.log(`Changing value for ${name} to ${value}`)
+      setNewSeasonal(prevEvent => ({
+          ...prevEvent,
+          [name]: value
+      }))
+    }
 
     function handleSubmit(e) {
       e.preventDefault();
@@ -136,6 +222,66 @@ export default function Calendar() {
       });
     }
 
+    function submitDefault(e) {
+      e.preventDefault();
+      if (newDefault.pricing > 100) {
+        const defaultNew = {
+          data: {
+            pricing: newDefault.pricing,
+          }
+        };
+
+        axios.post('http://localhost:1337/api/default-pricings', defaultNew,
+          {
+            headers: {
+              "Content-type": "application/json",
+              "Authorization": "Bearer 44f2a2de5c0dfa1243b0e811b0cf485ff07e98213a729ef317411facbd0c9d3b5d6beec68e03944ff90da6dfcbd049d9ab5bab81aa6430e2a13f97617967b75e850a7035903f6b980e9b505505a5e6b4c1b0d741196b35d11fcd8afc6f671f6506b75ebc900ce7a337ffe7f5396972384e41eabad8990510df4cb28f3a52cb02"
+            },
+          })
+        .then(response => {
+          setNewDefault({
+            pricing: 1,
+          });
+          displayAlert(1);
+        })
+        .catch(error => {
+          console.error('There was an error submitting default!', error);
+        });
+
+      }
+      
+    }
+
+    function submitSeasonal(e) {
+      e.preventDefault();
+      const seasonalNew = {
+        data: {
+          start: newSeasonal.startDate,
+          end: newSeasonal.endDate,
+          pricing: newSeasonal.seasonalPricing,
+        }
+      };
+
+      axios.post('http://localhost:1337/api/seasonal-pricings', seasonalNew,
+        {
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer 44f2a2de5c0dfa1243b0e811b0cf485ff07e98213a729ef317411facbd0c9d3b5d6beec68e03944ff90da6dfcbd049d9ab5bab81aa6430e2a13f97617967b75e850a7035903f6b980e9b505505a5e6b4c1b0d741196b35d11fcd8afc6f671f6506b75ebc900ce7a337ffe7f5396972384e41eabad8990510df4cb28f3a52cb02"
+          },
+        })
+      .then(response => {
+        setNewSeasonal({
+          startDate: '',
+          endDate: '',
+          seasonalPricing: 1,
+        });
+        displayAlert(2);
+      })
+      .catch(error => {
+        console.error('There was an error submitting default!', error);
+      });
+    }
+
     function handleDateClick(arg) {
       const clickedDate = new Date(arg.dateStr);
       const today = new Date();
@@ -154,9 +300,9 @@ export default function Calendar() {
         setShowModal(true)
     }
 
-    function handleDeleteModal() {
-        setShowDeleteModal(true)
-    }
+    // function handleDeleteModal() {
+    //     setShowDeleteModal(true)
+    // }
 
     const findRecordbyId = (id) => {
       return allEvents.find(event => event.id === id);
@@ -199,6 +345,18 @@ export default function Calendar() {
     return (
         <>
             <main>
+                <div className={`z-40 absolute right-0 p-2 w-96 my-4 text-sm text-blue-800 font-alata rounded-lg border border-blue-600 bg-blue-50 ${
+                      showAlert ? '' : 'hidden'
+                    }`} role="alert"
+                >
+                  <span className="w-full text-center">Default Pricing changed Successfully!</span>
+                </div>
+                <div className={`z-40 absolute right-0 p-2 w-96 my-4 text-sm text-blue-800 font-alata rounded-lg border border-blue-600 bg-blue-50 ${
+                      showAlertSeasonal ? '' : 'hidden'
+                    }`} role="alert"
+                >
+                  <span className="w-full text-center">Seasonal Pricing changed Successfully!</span>
+                </div>
                 <div className="mx-12 p-8 px-24 grid grid-cols-10 h-screen">
                     <div className="col-span-7">
                         <FullCalendar 
@@ -224,56 +382,97 @@ export default function Calendar() {
                             eventClick={handleShowEvent}
                         />
                     </div>
-                    <div className="col-span-2 ml-8 w-max p-8 h-max rounded-md font-alata mt-20">
-                        <div className="bg-zinc-100 p-4 py-8 rounded-lg">
+                    <div className="col-span-2 ml-8 w-max p-8 h-max rounded-md font-alata mt-">
+                      <h1 className="text-5xl font-bold text-center pb-8">Pricing Settings</h1>
+                        <div className="bg-zinc-100 p-8 rounded-lg">
                           <div className="w-full">
-                            <h2 className="text-3xl font-medium font-alata text-center pb-8">Set Pricing</h2>
+                            <h2 className="text-3xl font-medium font-alata text-center pb-8">Seasonal Pricing</h2>
                           </div>
-                          <form action="POST">
+                          <form action="submit" onSubmit={submitSeasonal}>
                             <div className="flex flex-row gap-4 pb-4">
                               <div className="flex gap-2 items-center">
-                                <label htmlFor="pricestart">Start</label>
-                                <input type="date" id="pricestart" name="pricestart" className="p-1 border border-green-600 rounded-md"/>
+                                <label htmlFor="startDate">Start</label>
+                                <input type="date" id="pricestart" name="startDate" className="p-1 border border-green-600 rounded-md" required
+                                  value={newSeasonal.startDate} onChange={handleSeasonalChange}/>
                               </div>
                               <div className="flex gap-2 items-center">
-                                <label htmlFor="priceend">End</label>
-                                <input type="date" id="priceend" name="priceend" className="p-1 border border-green-600 rounded-md"/>
+                                <label htmlFor="endDate">End</label>
+                                <input type="date" id="priceend" name="endDate" className="p-1 border border-green-600 rounded-md" required
+                                  value={newSeasonal.endDate} onChange={handleSeasonalChange}/>
                               </div>
                             </div>
                             <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
-                              <label htmlFor="pricing">Pricing</label>
-                              <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 px-2 border border-green-600 rounded-md"/>
+                              <label htmlFor="seasonalPricing">Pricing</label>
+                              <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 px-2 border border-green-600 rounded-md" required
+                                 name="seasonalPricing" value={newSeasonal.seasonalPricing} onChange={handleSeasonalChange}/>
                             </div>
                             <button
-                                    type="button"
-                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3  py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-green-600 hover:bg-green-600 sm:col-start-1 sm:mt-0"
-
+                                    type="submit"
+                                    className="
+                                      mt-3 inline-flex w-full justify-center rounded-md bg-white
+                                      px-3  py-2 text-sm font-semibold text-gray-900 shadow-sm
+                                      ring-1 ring-inset ring-green-600 hover:bg-green-600
+                                      sm:col-start-1 sm:mt-0"
                                   >
-                                    Cancel
+                                    Commit Changes
                             </button>
                           </form>
                         </div>
-                        <div className="bg-zinc-100 mt-2 p-4 py-8 rounded-lg">
+                        <div className="bg-zinc-100 mt-2 p-8 rounded-lg">
                           <div className="w-full">
-                            <h2 className="text-3xl font-medium font-alata text-center pb-8">Default Pricings</h2>
+                            <h2 className="text-3xl font-medium font-alata text-center pb-8">Default Pricing</h2>
                           </div>
-                          <form action="POST">
+                          <form action="submit" onSubmit={submitDefault}>
                             <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
                               <label htmlFor="pricing">Pricing</label>
-                              <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 px-2 border border-green-600 rounded-md"/>
+                              <input 
+                                type="number"
+                                name="pricing"
+                                min="1"
+                                max="20000"
+                                placeholder="1"
+                                className="p-1 px-2 border border-green-600 rounded-md"
+                                value={newDefault.pricing}
+                                onChange={handleDefaultChange}
+                              />
                             </div>
                             <button
-                                    type="button"
-                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-green-600 hover:bg-green-600 sm:col-start-1 sm:mt-0"
-
+                                    type="submit"
+                                    className="
+                                      active:bg-green-300 focus:outline-none focus:ring focus:ring-green-300
+                                      mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2
+                                      text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset
+                                      ring-green-600 hover:bg-green-600 sm:col-start-1 sm:mt-0
+                                    "
                                   >
-                                    Cancel
+                                    Commit Changes
                             </button>
                           </form>
                         </div>
+                        
                     </div>
                 </div>
-
+                <div className="bg-zinc-100 mt-2 p-4 py-8 rounded-lg w-full font-alata mx-12">
+                  <div className="w-full">
+                    <h2 className="text-3xl font-medium font-alata text-center pb-8">Pricing Changes</h2>
+                    <div className="seasonal-pricing-list">
+                      <h2 className="text-lg font-semibold mb-4">Seasonal Pricing</h2>
+                      {allSeasonals.length > 0 ? (
+                        <div className="grid grid-cols-1 gap-4">
+                          {allSeasonals.map((seasonal, index) => (
+                            <div key={index} className="p-4 border border-gray-300 rounded-md shadow-sm">
+                              <p><strong>Start Date:</strong> {new Date(seasonal.startDate).toLocaleDateString()}</p>
+                              <p><strong>End Date:</strong> {new Date(seasonal.endDate).toLocaleDateString()}</p>
+                              <p><strong>Pricing:</strong> Ksh.{seasonal.seasonalPricing}.00</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p>No seasonal pricing available.</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
                 <Transition.Root show={showDeleteModal} as={Fragment}>
                     <Dialog as="div" className="relative z-10" onClose={setShowDeleteModal}>
                         <Transition.Child
