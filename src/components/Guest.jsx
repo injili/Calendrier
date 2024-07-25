@@ -9,16 +9,23 @@ import { Dialog, Transition } from '@headlessui/react';
 import { HomeModernIcon } from "@heroicons/react/20/solid";
 import axios from 'axios';
 
+const API_KEY = import.meta.env.VITE_STRAPI_API_KEY
+const API_URL = import.meta.env.VITE_STRAPI_API_URL
+
 export default function Guest() {
     const [theEvents, setTheEvents] = useState([])
+    const [allSeasonals, setAllSeasonals] = useState([])
+    const [allDefaults, setAllDefaults] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [toShow, setToShow] = useState(null)
 
+
+
     useEffect(() => {
-        axios.get('http://localhost:1337/api/reservations',{
+        axios.get(`${API_URL}/reservations`,{
             headers:{
                 "Content-type": "application/json",
-                "Authorization": "Bearer 44f2a2de5c0dfa1243b0e811b0cf485ff07e98213a729ef317411facbd0c9d3b5d6beec68e03944ff90da6dfcbd049d9ab5bab81aa6430e2a13f97617967b75e850a7035903f6b980e9b505505a5e6b4c1b0d741196b35d11fcd8afc6f671f6506b75ebc900ce7a337ffe7f5396972384e41eabad8990510df4cb28f3a52cb02"
+                "Authorization": `Bearer ${API_KEY}`
             }
         })
         .then(response => {
@@ -37,6 +44,48 @@ export default function Guest() {
         .catch(error => {
             console.error('There was an error', error)
         })
+
+        axios.get(`${API_URL}/seasonal-pricings`, {
+            headers: {
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            }
+        })
+        .then(response => {
+            console.log('Fetched Seasonal Pricing:', response.data.data);
+
+            const formattedSeasonals = response.data.data.map(e => ({
+            startDate: e.attributes.start,
+            endDate: e.attributes.end,
+            seasonalPricing: e.attributes.pricing,
+            }));
+    
+            setAllSeasonals(formattedSeasonals);
+            
+        })
+        .catch(error => {
+            console.error('There was an error fetching the seasonals', error);
+        }); 
+
+        axios.get(`${API_URL}/default-pricings`, {
+            headers: {
+            "Content-type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+            }
+        })
+        .then(response => {
+            console.log('Fetched Default Pricing:', response.data.data);
+
+            const formattedDefaults = response.data.data.map(e => ({
+            pricing: e.attributes.pricing,
+            }));
+
+            setAllDefaults(formattedDefaults);
+            
+        })
+        .catch(error => {
+            console.error('There was an error fetching the seasonals', error);
+        }); 
     }, [])
 
     const handleGuestEvents = (events) => {
@@ -90,7 +139,7 @@ export default function Guest() {
     const findRecordbyDate = (date) => {
         return theEvents.find(event => event.start === date)
     }
-    
+
     function handleShowEvent(data) {
         console.log(data)
         setShowModal(true);
@@ -100,17 +149,42 @@ export default function Guest() {
         let updatedRecord = null;
         const date = new Date(data.dateStr);
         const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+
+
+        // Find seasonal pricing for the selected date
+        const seasonalPricing = allSeasonals.find(seasonal => {
+            const seasonalStart = new Date(seasonal.startDate);
+            const seasonalEnd = new Date(seasonal.endDate);
+            return (seasonalStart <= date && seasonalEnd >= date);
+        });
+
+        // Set pricing based on seasonal pricing or default pricing
+        let pricing = null;
+        if (seasonalPricing) {
+            pricing = seasonalPricing.seasonalPricing;
+        } else {
+            // If no seasonal pricing found, get the last default pricing
+            if (allDefaults.length > 0) {
+                pricing = allDefaults[allDefaults.length - 1].pricing;
+            } else {
+                pricing = 0; // Default to 0 if no pricing is available
+            }
+        }
+
         if (record) {
             updatedRecord = { ...record };
             if (updatedRecord.villas === 1) {
                 updatedRecord.title = 'Two villas available.';
                 updatedRecord.start = date.toLocaleDateString('en-us', options);
+                updatedRecord.pricing = pricing;
             } else if (updatedRecord.villas === 2) {
                 updatedRecord.title = 'One villa available.';
                 updatedRecord.start = date.toLocaleDateString('en-us', options);
+                updatedRecord.pricing = pricing;
             } else {
                 updatedRecord.title = 'No villa available.';
                 updatedRecord.start = date.toLocaleDateString('en-us', options);
+                updatedRecord.pricing = pricing;
             }
         } else {
             updatedRecord = {
@@ -118,6 +192,7 @@ export default function Guest() {
                 start: date.toLocaleDateString('en-us', options),
                 villas: 0,
                 allDay: true,
+                pricing: pricing,
             };
         }
     
@@ -190,6 +265,7 @@ export default function Guest() {
                                                     <div className="w-96 text-left flex flex-col items-center">
                                                         <span className="font-alata text-3xl">{toShow && toShow.title}</span>
                                                         <span className="font-bold font-alata text-lg py-2">{toShow && toShow.start}</span>
+                                                        <span className=" font-alata text-lg py-2">Each Villa @ Ksh.{toShow && toShow.pricing}.00</span>
                                                     </div>
                                                 </div>
                                             </div>
