@@ -19,8 +19,6 @@ export default function Guest() {
     const [showModal, setShowModal] = useState(false)
     const [toShow, setToShow] = useState(null)
 
-
-
     useEffect(() => {
         axios.get(`${API_URL}/reservations`,{
             headers:{
@@ -206,7 +204,7 @@ export default function Guest() {
         <>
             <main>
                 <div className="mx-12 px-24 py-8 grid grid-cols-10 h-screen">
-                    <div className="col-span-7">
+                    <div className="col-span-10">
                         <FullCalendar
                             plugins={[
                                 dayGridPlugin,
@@ -227,8 +225,8 @@ export default function Guest() {
                             fixedWeekCount={false}
                             dateClick={handleShowEvent}
                         />
-                        </div>
                     </div>
+                </div>
                     <Transition.Root show={showModal} as={Fragment}>
                         <Dialog as="div" className="relative z-10" onClose={setShowModal}>
                             <Transition.Child

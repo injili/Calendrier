@@ -208,6 +208,7 @@ export default function Calendar() {
         })
       .then(response => {
         setShowModal(false);
+        console.log(response);
         setNewEvent({
           title: '',
           start: '',

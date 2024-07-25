@@ -40,7 +40,7 @@ input {
   }
 
   .fc .fc-daygrid-day-bg .fc-bg-event {
-    @apply opacity-100 rounded-md;
+    @apply absolute m-2 opacity-100 w-8 h-8 rounded-full;
   }
 
   .fc-theme-standard td {
