@@ -341,6 +341,9 @@ export default function Calendar() {
         setToShow(null)
     }
 
+    const highestPricingEntry = allDefaults.length > 0 ? allDefaults[allDefaults.length - 1] : null;
+  
+    const today = new Date().toISOString().split('T')[0];
 
     return (
         <>
@@ -357,8 +360,8 @@ export default function Calendar() {
                 >
                   <span className="w-full text-center">Seasonal Pricing changed Successfully!</span>
                 </div>
-                <div className="mx-12 p-8 px-24 grid grid-cols-10 h-screen">
-                    <div className="col-span-7">
+                <div className="mx-4 px-4 grid grid-cols-10 h-screen">
+                    <div className="col-span-6">
                         <FullCalendar 
                             plugins={[
                                 dayGridPlugin,
@@ -382,96 +385,112 @@ export default function Calendar() {
                             eventClick={handleShowEvent}
                         />
                     </div>
-                    <div className="col-span-2 ml-8 w-max p-8 h-max rounded-md font-alata mt-">
+                    <div className="col-span-4 w-full p-8 h-max rounded-md font-alata">
                       <h1 className="text-5xl font-bold text-center pb-8">Pricing Settings</h1>
-                        <div className="bg-zinc-100 p-8 rounded-lg">
-                          <div className="w-full">
-                            <h2 className="text-3xl font-medium font-alata text-center pb-8">Seasonal Pricing</h2>
-                          </div>
-                          <form action="submit" onSubmit={submitSeasonal}>
-                            <div className="flex flex-row gap-4 pb-4">
-                              <div className="flex gap-2 items-center">
-                                <label htmlFor="startDate">Start</label>
-                                <input type="date" id="pricestart" name="startDate" className="p-1 border border-green-600 rounded-md" required
-                                  value={newSeasonal.startDate} onChange={handleSeasonalChange}/>
+                          <div className="flex gap-2">
+                            <div className="bg-zinc-100 p-4 rounded-lg">
+                            <div className="w-full">
+                              <h2 className="text-2xl font-semibold font-alata text-center pb-4">Seasonal Pricing</h2>
+                            </div>
+                            <form action="submit" onSubmit={submitSeasonal}>
+                              <div className="flex flex-row gap-4 pb-4">
+                                <div className="flex gap-2 items-center">
+                                  <label htmlFor="startDate">Start</label>
+                                  <input type="date" id="pricestart" name="startDate" min={today} className="p-1 border border-green-600 rounded-md" required
+                                    value={newSeasonal.startDate} onChange={handleSeasonalChange}/>
+                                </div>
+                                <div className="flex gap-2 items-center">
+                                  <label htmlFor="endDate">End</label>
+                                  <input type="date" id="priceend" name="endDate" min={today} className="p-1 border border-green-600 rounded-md" required
+                                    value={newSeasonal.endDate} onChange={handleSeasonalChange}/>
+                                </div>
                               </div>
-                              <div className="flex gap-2 items-center">
-                                <label htmlFor="endDate">End</label>
-                                <input type="date" id="priceend" name="endDate" className="p-1 border border-green-600 rounded-md" required
-                                  value={newSeasonal.endDate} onChange={handleSeasonalChange}/>
+                              <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
+                                <label htmlFor="seasonalPricing">Pricing</label>
+                                <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 px-2 border border-green-600 rounded-md" required
+                                  name="seasonalPricing" value={newSeasonal.seasonalPricing} onChange={handleSeasonalChange}/>
                               </div>
-                            </div>
-                            <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
-                              <label htmlFor="seasonalPricing">Pricing</label>
-                              <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 px-2 border border-green-600 rounded-md" required
-                                 name="seasonalPricing" value={newSeasonal.seasonalPricing} onChange={handleSeasonalChange}/>
-                            </div>
-                            <button
-                                    type="submit"
-                                    className="
-                                      mt-3 inline-flex w-full justify-center rounded-md bg-white
-                                      px-3  py-2 text-sm font-semibold text-gray-900 shadow-sm
-                                      ring-1 ring-inset ring-green-600 hover:bg-green-600
-                                      sm:col-start-1 sm:mt-0"
-                                  >
-                                    Commit Changes
-                            </button>
-                          </form>
-                        </div>
-                        <div className="bg-zinc-100 mt-2 p-8 rounded-lg">
-                          <div className="w-full">
-                            <h2 className="text-3xl font-medium font-alata text-center pb-8">Default Pricing</h2>
+                              <button
+                                      type="submit"
+                                      className="
+                                        mt-3 inline-flex w-full justify-center rounded-md bg-green-100
+                                        px-3  py-2 text-sm font-semibold text-gray-900 shadow-sm
+                                        ring-1 ring-inset ring-green-600 hover:bg-green-600
+                                        sm:col-start-1 sm:mt-0"
+                                    >
+                                      Commit Changes
+                              </button>
+                            </form>
                           </div>
-                          <form action="submit" onSubmit={submitDefault}>
-                            <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
-                              <label htmlFor="pricing">Pricing</label>
-                              <input 
-                                type="number"
-                                name="pricing"
-                                min="1"
-                                max="20000"
-                                placeholder="1"
-                                className="p-1 px-2 border border-green-600 rounded-md"
-                                value={newDefault.pricing}
-                                onChange={handleDefaultChange}
-                              />
+                          <div className="bg-zinc-100 p-4 w-full rounded-lg">
+                            <div className="w-full">
+                              <h2 className="text-2xl font-semibold font-alata text-center pb-4">Default Pricing</h2>
                             </div>
-                            <button
-                                    type="submit"
-                                    className="
-                                      active:bg-green-300 focus:outline-none focus:ring focus:ring-green-300
-                                      mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2
-                                      text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset
-                                      ring-green-600 hover:bg-green-600 sm:col-start-1 sm:mt-0
-                                    "
-                                  >
-                                    Commit Changes
-                            </button>
-                          </form>
+                            <form action="submit" onSubmit={submitDefault}>
+                              <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
+                                <label htmlFor="pricing">Pricing</label>
+                                <input 
+                                  type="number"
+                                  name="pricing"
+                                  min="1"
+                                  max="20000"
+                                  placeholder="1"
+                                  className="p-1 px-2 border border-green-600 rounded-md"
+                                  value={newDefault.pricing}
+                                  onChange={handleDefaultChange}
+                                  required
+                                />
+                              </div>
+                              <button
+                                      type="submit"
+                                      className="
+                                        active:bg-green-300 focus:outline-none focus:ring focus:ring-green-300
+                                        mt-3 inline-flex w-full justify-center rounded-md bg-green-100 px-3 py-2
+                                        text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset
+                                        ring-green-600 hover:bg-green-600 sm:col-start-1 sm:mt-0
+                                      "
+                                    >
+                                      Commit Changes
+                              </button>
+                            </form>
+                          </div>
                         </div>
-                        
-                    </div>
-                </div>
-                <div className="bg-zinc-100 mt-2 p-4 py-8 rounded-lg w-full font-alata mx-12">
-                  <div className="w-full">
-                    <h2 className="text-3xl font-medium font-alata text-center pb-8">Pricing Changes</h2>
-                    <div className="seasonal-pricing-list">
-                      <h2 className="text-lg font-semibold mb-4">Seasonal Pricing</h2>
-                      {allSeasonals.length > 0 ? (
-                        <div className="grid grid-cols-1 gap-4">
-                          {allSeasonals.map((seasonal, index) => (
-                            <div key={index} className="p-4 border border-gray-300 rounded-md shadow-sm">
-                              <p><strong>Start Date:</strong> {new Date(seasonal.startDate).toLocaleDateString()}</p>
-                              <p><strong>End Date:</strong> {new Date(seasonal.endDate).toLocaleDateString()}</p>
-                              <p><strong>Pricing:</strong> Ksh.{seasonal.seasonalPricing}.00</p>
-                            </div>
-                          ))}
+                        <div className="bg-zinc-100 mt-2 px-4 py-4 rounded-lg w-full font-alata">
+                          <h2 className="text-2xl font-semibold font-alata text-center py-4">Pricing History</h2>
+                          <div className="pb-4 mb-4 border border-gray-200 rounded-md">
+                            <h2 className="text-xl text-center mb-4"><strong>Seasonal Pricing</strong></h2>
+                            {allSeasonals.length > 0 ? (
+                              <div className="grid grid-cols-1 gap-2">
+                                {allSeasonals.map((seasonal, index) => (
+                                  <div key={index} className="p-2 flex gap-4 justify-center">
+                                    <p><strong>Start Date:</strong> {new Date(seasonal.startDate).toLocaleDateString()}</p>
+                                    <p><strong>End Date:</strong> {new Date(seasonal.endDate).toLocaleDateString()}</p>
+                                    <p><strong>Pricing:</strong> Ksh.{seasonal.seasonalPricing}.00</p>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p>No seasonal pricing available.</p>
+                            )}
+                          </div>
+                          <div className="pb-4 border border-gray-200 rounded-md">
+                            <h2 className="text-xl text-center mb-4"><strong>Default Pricing</strong></h2>
+                            {allDefaults.length > 0 ? (
+                              <div className="grid grid-cols-1 gap-2">
+                                {allDefaults.length > 0 ? (
+                                  <div className="p-2 flex justify-center">
+                                    <p><strong>Current Pricing:</strong> Ksh.{highestPricingEntry.pricing}.00</p>
+                                  </div>
+                                ) : (
+                                  <p>No default pricing available.</p>
+                                )}
+                              </div>
+                            ) : (
+                              <p>No default pricing available.</p>
+                            )}
+                          </div>
                         </div>
-                      ) : (
-                        <p>No seasonal pricing available.</p>
-                      )}
                     </div>
-                  </div>
                 </div>
                 <Transition.Root show={showDeleteModal} as={Fragment}>
                     <Dialog as="div" className="relative z-10" onClose={setShowDeleteModal}>
@@ -641,7 +660,7 @@ export default function Calendar() {
                                     focus:ring-inset focus:ring-zinc-600 
                                     sm:text-sm sm:leading-6
                                   "
-                                    value={newEvent.title} onChange={handleChange} placeholder="Name of the guest" />
+                                    value={newEvent.title} onChange={handleChange} placeholder="Name of the guest" required/>
                                 </div>
                                 <div className="mt-2 flex items-center gap-4">
                                   <label htmlFor="phone" className="font-semibold w-16 text-left">Phone</label>
@@ -654,7 +673,7 @@ export default function Calendar() {
                                   "
                                     placeholder="0712345678"
                                     value={newEvent.phone} onChange={handleChange}
-                                    />
+                                    required/>
                                 </div>
                                 <div className="mt-2 flex items-center gap-4">
                                   <label htmlFor="villas" className="font-semibold w-16 text-left">Villas</label>
@@ -667,21 +686,21 @@ export default function Calendar() {
                                   "
                                     placeholder="1" min="1" max="3"
                                     value={newEvent.villas} onChange={handleChange}
-                                    />
+                                    required/>
                                 </div>
                                 <div className="flex items center gap-4">
                                   <div className="mt-2 flex items-center gap-2">
                                     <label htmlFor="checkin" className="font-semibold">Check-In</label>
-                                    <input id="checkout" type="date" name="start" 
+                                    <input id="checkout" type="date" name="start" min={today} 
                                     className="
                                       px-2 py-1 block rounded-md border-0 text-gray-900 
                                       shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
                                       focus:ring-2 focus:ring-inset focus:ring-zinc-600 
                                       sm:text-sm sm:leading-6
                                     "
-                                      placeholder="" min="" max=""
+                                      placeholder=""
                                       value={newEvent.start} onChange={handleChange}
-                                      />
+                                      required/>
                                   </div>
                                   <div className="mt-2 flex items-center gap-2">
                                     <label htmlFor="checkout" className="font-semibold">Check-Out</label>
@@ -692,9 +711,9 @@ export default function Calendar() {
                                       focus:ring-2 focus:ring-inset focus:ring-zinc-600 
                                       sm:text-sm sm:leading-6
                                     "
-                                      placeholder="" min="" max=""
+                                      placeholder="" min={today}
                                       value={newEvent.end} onChange={handleChange}
-                                      />
+                                      required/>
                                   </div>
                                 </div>
                                 <div className="mt-8 sm:mt-8 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
