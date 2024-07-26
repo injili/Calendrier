@@ -40,7 +40,7 @@ input {
   }
 
   .fc .fc-daygrid-day-bg .fc-bg-event {
-    @apply absolute m-2 opacity-100 w-8 h-8 rounded-full;
+    @apply absolute m-2 opacity-100 w-6 h-6 rounded-full;
   }
 
   .fc-theme-standard td {
@@ -69,11 +69,11 @@ input {
   }
   
   .fc .fc-daygrid-day.fc-day-today {
-    @apply bg-zinc-600 rounded-md;
+    @apply bg-zinc-600;
   }
  
   .fc .fc-button{
-    @apply bg-zinc-950 hover:bg-zinc-800  border border-white hover:border-white rounded-lg;
+    @apply bg-zinc-950 hover:bg-zinc-800  border border-white hover:border-white;
   }
   
   .fc .fc-button-primary:not(:disabled).fc-button-active {

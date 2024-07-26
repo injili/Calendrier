@@ -46,12 +46,12 @@ export default function Calendar() {
         setShowAlert(true);
         setTimeout(() => {
           setShowAlert(false);
-        }, 10000); // Hide the alert after 10 seconds
+        }, 5000); // Hide the alert after 10 seconds
       } else {
         setShowAlertSeasonal(true);
         setTimeout(() => {
           setShowAlertSeasonal(false);
-        }, 10000); // Hide the alert after 10 seconds
+        }, 5000); // Hide the alert after 10 seconds
       }
       
     };
@@ -179,10 +179,10 @@ export default function Calendar() {
       };
 
       let bgc;
-      if (newEvent.villas === 1) {
+      if (eventToCreate.data.villas === 1) {
         bgc = '#59a321';
-      } else if (newEvent.villas === 2) {
-        bgc = '#76911c';
+      } else if (eventToCreate.data.villas === 2) {
+        bgc = '#f58318';
       } else {
         bgc = '#962921';
       }
@@ -320,11 +320,23 @@ export default function Calendar() {
 
     function handleDelete() {
         setAllEvents(prevEvents => prevEvents.filter(event => event.id !== idToDelete))
-        console.log(idToDelete)
-        console.log(allEvents)
+        deleteEntry(idToDelete)
         setShowEventModal(false)
         setIdToDelete(null)
     }
+
+    const deleteEntry = async (id) => {
+      try {
+        await axios.delete(`${API_URL}/reservations/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`,
+          },
+        });
+      } catch (error) {
+        console.error('Error deleting entry:', error);
+      }
+    };
 
     function handleCloseModal() {
         setShowModal(false)
@@ -350,13 +362,13 @@ export default function Calendar() {
     return (
         <>
             <main>
-                <div className={`z-40 absolute right-0 p-2 w-96 my-4 text-sm text-blue-800 font-alata rounded-lg border border-blue-600 bg-blue-50 ${
+                <div className={`z-40 absolute right-0 p-8 w-96 my-4 text-sm text-blue-800 font-alata rounded-lg border border-blue-600 bg-blue-50 ${
                       showAlert ? '' : 'hidden'
                     }`} role="alert"
                 >
                   <span className="w-full text-center">Default Pricing changed Successfully!</span>
                 </div>
-                <div className={`z-40 absolute right-0 p-2 w-96 my-4 text-sm text-blue-800 font-alata rounded-lg border border-blue-600 bg-blue-50 ${
+                <div className={`z-40 absolute right-0 p-8 w-96 my-4 text-sm text-blue-800 font-alata rounded-lg border border-blue-600 bg-blue-50 ${
                       showAlertSeasonal ? '' : 'hidden'
                     }`} role="alert"
                 >
@@ -387,49 +399,15 @@ export default function Calendar() {
                             eventClick={handleShowEvent}
                         />
                     </div>
-                    <div className="col-span-4 w-full p-8 h-max rounded-md font-alata">
+                    <div className="col-span-4 w-full p-8 py-12 h-max rounded-md font-alata">
                       <h1 className="text-5xl font-bold text-center pb-8">Pricing Settings</h1>
-                          <div className="flex gap-2">
-                            <div className="bg-zinc-100 p-4 rounded-lg">
-                            <div className="w-full">
-                              <h2 className="text-2xl font-semibold font-alata text-center pb-4">Seasonal Pricing</h2>
-                            </div>
-                            <form action="submit" onSubmit={submitSeasonal}>
-                              <div className="flex flex-row gap-4 pb-4">
-                                <div className="flex gap-2 items-center">
-                                  <label htmlFor="startDate">Start</label>
-                                  <input type="date" id="pricestart" name="startDate" min={today} className="p-1 border border-green-600 rounded-md" required
-                                    value={newSeasonal.startDate} onChange={handleSeasonalChange}/>
-                                </div>
-                                <div className="flex gap-2 items-center">
-                                  <label htmlFor="endDate">End</label>
-                                  <input type="date" id="priceend" name="endDate" min={today} className="p-1 border border-green-600 rounded-md" required
-                                    value={newSeasonal.endDate} onChange={handleSeasonalChange}/>
-                                </div>
-                              </div>
-                              <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
-                                <label htmlFor="seasonalPricing">Pricing</label>
-                                <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 px-2 border border-green-600 rounded-md" required
-                                  name="seasonalPricing" value={newSeasonal.seasonalPricing} onChange={handleSeasonalChange}/>
-                              </div>
-                              <button
-                                      type="submit"
-                                      className="
-                                        mt-3 inline-flex w-full justify-center rounded-md bg-green-100
-                                        px-3  py-2 text-sm font-semibold text-gray-900 shadow-sm
-                                        ring-1 ring-inset ring-green-600 hover:bg-green-600
-                                        sm:col-start-1 sm:mt-0"
-                                    >
-                                      Commit Changes
-                              </button>
-                            </form>
-                          </div>
-                          <div className="bg-zinc-100 p-4 w-full rounded-lg">
+                          <div className="grid grid-cols-2 gap-2">
+                          <div className="col-span-1 bg-zinc-100 p-4 rounded-lg">
                             <div className="w-full">
                               <h2 className="text-2xl font-semibold font-alata text-center pb-4">Default Pricing</h2>
                             </div>
                             <form action="submit" onSubmit={submitDefault}>
-                              <div className="w-full flex flex-row gap-2 justify-center items-center pb-4">
+                              <div className="w-full flex flex-row gap-2 items-center pb-4">
                                 <label htmlFor="pricing">Pricing</label>
                                 <input 
                                   type="number"
@@ -437,7 +415,7 @@ export default function Calendar() {
                                   min="1"
                                   max="20000"
                                   placeholder="1"
-                                  className="p-1 px-2 border border-green-600 rounded-md"
+                                  className="p-1 w-36 px-2 border border-green-600 rounded-md"
                                   value={newDefault.pricing}
                                   onChange={handleDefaultChange}
                                   required
@@ -451,6 +429,41 @@ export default function Calendar() {
                                         text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset
                                         ring-green-600 hover:bg-green-600 sm:col-start-1 sm:mt-0
                                       "
+                                    >
+                                      Commit Changes
+                              </button>
+                            </form>
+                          </div>
+                            <div className="bg-zinc-100 col-span-1 p-4 rounded-lg">
+                            <div className="w-full">
+                              <h2 className="text-2xl font-semibold font-alata text-center pb-4">Seasonal Pricing</h2>
+                            </div>
+                            <form action="submit" onSubmit={submitSeasonal}>
+                              <div className="flex flex-col gap-2 pb-2">
+                                <div className="flex gap-2 items-center">
+                                  <label htmlFor="startDate">Start</label>
+                                  <input type="date" id="pricestart" name="startDate" min={today} className="p-1 w-36 border border-green-600 rounded-md" required
+                                    value={newSeasonal.startDate} onChange={handleSeasonalChange}/>
+                                </div>
+                                <div className="flex gap-2 items-center">
+                                  <label htmlFor="endDate">End</label>
+                                  <input type="date" id="priceend" name="endDate" min={today} className="p-1 w-36 border border-green-600 rounded-md" required
+                                    value={newSeasonal.endDate} onChange={handleSeasonalChange}/>
+                                </div>
+                              
+                              <div className="w-full flex flex-row gap-2 items-center pb-4">
+                                <label htmlFor="seasonalPricing">Pricing</label>
+                                <input type="number" step="0.01" min="1" placeholder="Enter amount" className="p-1 w-36 px-2 border border-green-600 rounded-md" required
+                                  name="seasonalPricing" value={newSeasonal.seasonalPricing} onChange={handleSeasonalChange}/>
+                              </div>
+                              </div>
+                              <button
+                                      type="submit"
+                                      className="
+                                        mt-3 inline-flex w-full justify-center rounded-md bg-green-100
+                                        px-3  py-2 text-sm font-semibold text-gray-900 shadow-sm
+                                        ring-1 ring-inset ring-green-600 hover:bg-green-600
+                                        sm:col-start-1 sm:mt-0"
                                     >
                                       Commit Changes
                               </button>
@@ -594,7 +607,7 @@ export default function Calendar() {
                                   <p><span className="font-bold">Name: </span>{toShow && toShow.title}</p>
                                   <p><span className="font-bold">Phone: </span>{toShow && toShow.phone}</p>
                                   <p><span className="font-bold">Villas: </span>{toShow && toShow.villas}</p>
-                                  <p><span className="font-bold">Chek-In Date: </span>{toShow && toShow.start}</p>
+                                  <p><span className="font-bold">Check-In Date: </span>{toShow && toShow.start}</p>
                                   <p><span className="font-bold">Check-Out Date: </span>{toShow && toShow.end}</p>
                                 </div>
                               </div>

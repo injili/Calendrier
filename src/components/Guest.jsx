@@ -203,8 +203,8 @@ export default function Guest() {
     return (
         <>
             <main>
-                <div className="mx-12 px-24 py-8 grid grid-cols-10 h-screen">
-                    <div className="col-span-10">
+                <div className="mx-40 px-40 py-8 grid grid-cols-10 gap-1 h-screen">
+                    <div className="col-span-8">
                         <FullCalendar
                             plugins={[
                                 dayGridPlugin,
@@ -225,6 +225,27 @@ export default function Guest() {
                             fixedWeekCount={false}
                             dateClick={handleShowEvent}
                         />
+                    </div>
+                    <div className='col-span-2 mt-32 flex flex-col justify-center p-4 bg-zinc-100 font-alata h-max'>
+                        <h1 className='font-semibold text-xl text-center py-4'>Guide</h1>
+                        <p className='pb-8'>
+                        Dates marked with colored dots indicate reservations. The meaning of the dots is as follows:
+                        </p>
+                        <div className='flex gap-4'>
+                        <div className='w-6 h-6 rounded-full bg-red-800'></div>
+                        <p>No Villa is available.</p>
+                        </div>
+                        <div className='flex gap-4 mt-4'>
+                        <div className='w-6 h-6 rounded-full bg-orange-400'></div>
+                        <p>One Villa is available.</p>
+                        </div>
+                        <div className='flex gap-4 mt-4'>
+                        <div className='w-6 h-6 rounded-full bg-lime-600'></div>
+                        <p>Two Villas are available.</p>
+                        </div>
+                        <p className='pt-8'>
+                        Dates without colored dots indicate that all three villas are available. Tap on the calendar dates to see more specific details.
+                        </p>
                     </div>
                 </div>
                     <Transition.Root show={showModal} as={Fragment}>
