@@ -1,8 +1,24 @@
-# React + Vite
+# Calendrier
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Calendrier is a web application designed to assist villa and B&B owners in managing their listings by keeping records, managing pricing, and displaying property availability throughout the year. This application serves both clients and hosts through distinct interfaces. Clients can view property availability and nightly rates, while hosts can create and cancel bookings and regulate property pricing.
+Calendrier aims to provide a comprehensive solution for property owners by merging booking information from all platforms and personal bookings, ensuring easy access to up-to-date availability information for both owners and their clients.
 
-Currently, two official plugins are available:
+## Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Front-end
+
+- HTML
+- Tailwind CSS
+- React
+
+### Back-end
+
+- Strapi
+
+### Database
+
+- PostgreSQL
+
+### Testing
+
+- Jest
